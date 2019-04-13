@@ -19,7 +19,7 @@ def connect_to_db(app):
 	db.app = app
 	db.init_app(app)
 
-
+## this is a brute force way of running a SQL query 
 def get_student_by_github(github):
 	"""Given a GitHub account name, print info about the matching student."""
 
@@ -78,7 +78,7 @@ def get_grade_by_github_title(github, title):
 	SELECT students.first_name,
 	students.last_name,
 	grades.student_github,
-	grades.project_title, 
+	grades.project_title,
 	grades.grade
 
 	FROM grades
@@ -89,8 +89,8 @@ def get_grade_by_github_title(github, title):
 	db_cursor = db.session.execute(QUERY, {'project_title': title})
 
 	row = db_cursor.fetchone()
-	
-		
+
+
 	print("Student: {} {} Title:{} Grade: {}".format(row[0], row[1], row[3], row[4]))
 
 
@@ -98,7 +98,7 @@ def assign_grade(github, title, grade):
 	"""Assign a student a grade on an assignment and print a confirmation."""
 	QUERY = """
 		UPDATE grades SET grade = :grade
-		WHERE project_title = project_title 
+		WHERE project_title = project_title
 	"""
 	db.session.execute(QUERY, {'grade': grade})
 	db.session.commit()
@@ -129,7 +129,7 @@ def get_all_grades(first_name, last_name):
 	SELECT students.first_name,
 	students.last_name,
 	grades.student_github,
-	grades.project_title, 
+	grades.project_title,
 	grades.grade
 	FROM grades
 	JOIN students ON (grades.student_github) = (students.github)
@@ -139,10 +139,10 @@ def get_all_grades(first_name, last_name):
 	db_cursor = db.session.execute(QUERY, {'grade': first_name})
 
 	results = db_cursor.fetchall()
-	
+
 	for result in results:
 		print('Title: {} Grade: {}'.format(result[3], result[4]))
-		
+
 
 def handle_input():
 	"""Main loop.
@@ -169,11 +169,11 @@ def handle_input():
 
 		elif command == "assign_grade":
 			github, title, grade = args  # unpack!
-			assign_grade(github, title, grade)	
-		
+			assign_grade(github, title, grade)
+
 		elif command == "get_grade":
 			github, title = args  # unpack!
-			get_grade_by_github_title(github, title) 
+			get_grade_by_github_title(github, title)
 
 		elif command == "get_title":
 			title = args[0]  # unpack!
